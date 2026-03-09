@@ -1,16 +1,153 @@
 import type { Express } from "express";
-import { createServer, type Server } from "http";
+import type { Server } from "http";
 import { storage } from "./storage";
+import { api } from "@shared/routes";
 
 export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
-  // put application routes here
-  // prefix all routes with /api
 
-  // use storage to perform CRUD operations on the storage interface
-  // e.g. storage.insertUser(user) or storage.getUserByUsername(username)
+  app.get(api.portfolio.get.path, async (req, res) => {
+    try {
+      const [
+        personalInfoData,
+        experiencesData,
+        educationData,
+        projectsData,
+        skillsData
+      ] = await Promise.all([
+        storage.getPersonalInfo(),
+        storage.getExperiences(),
+        storage.getEducation(),
+        storage.getProjects(),
+        storage.getSkills()
+      ]);
+
+      res.json({
+        personalInfo: personalInfoData,
+        experiences: experiencesData,
+        education: educationData,
+        projects: projectsData,
+        skills: skillsData
+      });
+    } catch (error) {
+      console.error('Error fetching portfolio:', error);
+      res.status(500).json({ message: 'Failed to fetch portfolio data' });
+    }
+  });
 
   return httpServer;
+}
+
+// Seed function to populate DB if empty
+export async function seedDatabase() {
+  const existingInfo = await storage.getPersonalInfo();
+  if (!existingInfo) {
+    console.log("Seeding database with portfolio data...");
+    
+    await storage.createPersonalInfo({
+      name: "Mohamed Rizk Shalaby",
+      role: "Flutter Developer",
+      objective: "Aspiring to become an excellent Flutter developer capable of working with multiple technologies. Possess a strong knowledge of business needs and the ability to fulfill market demands with state-of-the-art mobile solutions. Eager to leverage expertise in Flutter to create high-quality, scalable, and user-friendly applications that drive business success.",
+      email: "mrizk5500@icloud.com",
+      phone: "(+20)1098434717",
+      linkedin: "https://linkedin.com",
+      github: "https://github.com",
+      languages: ["Arabic", "English"]
+    });
+
+    await storage.createExperience({
+      company: "Acwad",
+      location: "İstanbul (Remote)",
+      role: "Flutter Developer",
+      period: "November 2023 – June 2024",
+      achievements: [
+        "Developed and deployed multiple mobile applications using Flutter, focusing on high performance and scalability.",
+        "Collaborated remotely with cross-functional teams to ensure seamless integration of front-end and back-end systems.",
+        "Implemented best practices for app performance, UI/UX design, and code maintainability"
+      ]
+    });
+
+    await storage.createExperience({
+      company: "Freelance",
+      location: "Jordan (remotely)",
+      role: "Flutter Developer",
+      period: "Feb, 2024 - Jun, 2024",
+      achievements: [
+        "Worked remotely to complete and enhance the SeeSooq mobile application.",
+        "Contributed to various features and functionalities of the application, ensuring alignment with project requirements and deadlines.",
+        "Collaborated with the team to resolve bugs and implement improvements for a seamless user experience."
+      ]
+    });
+
+    await storage.createEducation({
+      institution: "Menoufia University, Shebin El Kom Faculty of Computers and Information",
+      degree: "Bachelor's Degree in Computer Engineering",
+      period: "2019 - 2024"
+    });
+
+    await storage.createProject({
+      name: "Bank App",
+      description: "Developed with Flutter, the app leverages GetX for efficient state management and dependency injection, ensuring both responsiveness and scalability. API integration supports secure transactions, while QR code functionality facilitates transaction and payment processing. The app integrates seamlessly with phones to enhance user experience and utilizes Firebase for real-time data management and user authentication, along with Firebase notifications for transaction updates.",
+      githubLink: "https://github.com",
+      storeLink: null,
+      technologies: ["Flutter", "GetX", "Firebase", "QR Code", "REST APIs"]
+    });
+
+    await storage.createProject({
+      name: "Monazamah App",
+      description: "Designed to manage organizational tasks, incorporating APIs for data synchronization and Firebase for real-time updates and notifications, including alerts for important updates and reminders. Additionally, the app utilizes NFC technology for reading and writing data to enhance task management and streamline processes.",
+      githubLink: "https://github.com",
+      storeLink: null,
+      technologies: ["Flutter", "Firebase", "NFC", "REST APIs"]
+    });
+    
+    await storage.createProject({
+      name: "Acwad_hr App",
+      description: "HR System: Integrated APIs and Firebase for data handling and authentication. macOS App: Native macOS version with enhanced UI and animations. UI & Animations: Implemented dynamic UI elements and smooth transitions. Features: Employee management, attendance tracking, and real-time updates.",
+      githubLink: "https://github.com",
+      storeLink: null,
+      technologies: ["Flutter", "macOS", "Firebase", "REST APIs"]
+    });
+
+    await storage.createProject({
+      name: "Medical Excel App",
+      description: "Transitioned an application from Canon-based systems to a medical-focused solution using Flutter and MedicalExcel. Modified and adapted the code to support comprehensive medical data management, including changes to API integration.",
+      githubLink: "https://github.com",
+      storeLink: null,
+      technologies: ["Flutter", "REST APIs"]
+    });
+
+    await storage.createProject({
+      name: "SeeSooq App",
+      description: "Contributed to the development of the SeeSooq mobile application with a focus on clean code practices and UI enhancements. Utilized the BLoC pattern for state management and developed engaging reels for user interaction.",
+      githubLink: "https://github.com",
+      storeLink: "https://play.google.com",
+      technologies: ["Flutter", "BLoC"]
+    });
+
+    await storage.createProject({
+      name: "TahetApp",
+      description: "built using Cubit for state management and includes a total of 5 screens. This architecture ensures clear and manageable state transitions across the app. The app’s design and functionality are optimized to provide a seamless user experience across various features.",
+      githubLink: "https://github.com",
+      storeLink: "https://apps.apple.com",
+      technologies: ["Flutter", "Cubit"]
+    });
+
+    await storage.createSkill({
+      category: "Technical Skills",
+      items: [
+        "Flutter & Dart",
+        "Object-Oriented Programming (OOP)",
+        "State Management: Provider, Cubit, BLoC, GetX",
+        "RESTful APIs",
+        "Firebase",
+        "Version Control: Git",
+        "Clean Architecture"
+      ]
+    });
+    
+    console.log("Database seeded successfully");
+  }
 }
