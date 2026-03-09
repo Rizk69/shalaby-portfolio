@@ -1,4 +1,36 @@
+import "dotenv/config";
+// polyfill crypto.hash for Node versions where it's missing (e.g. certain Node 21 builds)
+import { createHash } from "crypto";
+if (typeof (globalThis as any).crypto?.hash !== "function") {
+  const hashFn = (algorithm: string, data: string | Buffer, encoding?: "hex" | "base64") => {
+    const h = createHash(algorithm as any);
+    h.update(data);
+    return encoding ? h.digest(encoding) : h.digest();
+  };
+
+  const gcrypto = (globalThis as any).crypto;
+  if (gcrypto) {
+    try {
+      Object.defineProperty(gcrypto, "hash", {
+        value: hashFn,
+        writable: true,
+        configurable: true,
+      });
+    } catch (e) {
+      // best-effort: ignore if we can't define
+    }
+  } else {
+    try {
+      (globalThis as any).crypto = { hash: hashFn };
+    } catch (e) {
+      // ignore
+    }
+  }
+}
+
 import express, { type Request, Response, NextFunction } from "express";
+// show DATABASE_URL early for debugging env loading
+console.log('DEBUG: process.env.DATABASE_URL =', process.env.DATABASE_URL);
 import { registerRoutes } from "./routes";
 import { serveStatic } from "./static";
 import { createServer } from "http";
@@ -91,15 +123,11 @@ app.use((req, res, next) => {
   // Other ports are firewalled. Default to 5000 if not specified.
   // this serves both the API and the client.
   // It is the only port that is not firewalled.
-  const port = parseInt(process.env.PORT || "5000", 10);
-  httpServer.listen(
-    {
-      port,
-      host: "0.0.0.0",
-      reusePort: true,
-    },
+  const port = parseInt(process.env.PORT || "3000", 10);
+  httpServer.listen(port, "127.0.0.1",
     () => {
       log(`serving on port ${port}`);
     },
   );
 })();
+

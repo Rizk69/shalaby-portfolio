@@ -1,0 +1,142 @@
+{
+  "personalInfo": [
+    {
+      "id": 1,
+      "name": "Mohamed Rizk Shalaby",
+      "role": "Flutter Developer",
+      "objective": "Aspiring to become an excellent Flutter developer capable of working with multiple technologies. Possess a strong knowledge of business needs and the ability to fulfill market demands with state-of-the-art mobile solutions. Eager to leverage expertise in Flutter to create high-quality, scalable, and user-friendly applications that drive business success.",
+      "email": "mrizk5500@icloud.com",
+      "phone": "(+20)1098434717",
+      "linkedin": "https://linkedin.com",
+      "github": "https://github.com",
+      "languages": [
+        "Arabic",
+        "English"
+      ]
+    }
+  ],
+  "experiences": [
+    {
+      "id": 1,
+      "company": "Acwad",
+      "location": "İstanbul (Remote)",
+      "role": "Flutter Developer",
+      "period": "November 2023 – June 2024",
+      "achievements": [
+        "Developed and deployed multiple mobile applications using Flutter, focusing on high performance and scalability.",
+        "Collaborated remotely with cross-functional teams to ensure seamless integration of front-end and back-end systems.",
+        "Implemented best practices for app performance, UI/UX design, and code maintainability"
+      ]
+    },
+    {
+      "id": 2,
+      "company": "Freelance",
+      "location": "Jordan (remotely)",
+      "role": "Flutter Developer",
+      "period": "Feb, 2024 - Jun, 2024",
+      "achievements": [
+        "Worked remotely to complete and enhance the SeeSooq mobile application.",
+        "Contributed to various features and functionalities of the application, ensuring alignment with project requirements and deadlines.",
+        "Collaborated with the team to resolve bugs and implement improvements for a seamless user experience."
+      ]
+    }
+  ],
+  "education": [
+    {
+      "id": 1,
+      "institution": "Menoufia University, Shebin El Kom Faculty of Computers and Information",
+      "degree": "Bachelor's Degree in Computer Engineering",
+      "period": "2019 - 2024"
+    }
+  ],
+  "projects": [
+    {
+      "id": 1,
+      "name": "Bank App",
+      "description": "Developed with Flutter, the app leverages GetX for efficient state management and dependency injection, ensuring both responsiveness and scalability. API integration supports secure transactions, while QR code functionality facilitates transaction and payment processing. The app integrates seamlessly with phones to enhance user experience and utilizes Firebase for real-time data management and user authentication, along with Firebase notifications for transaction updates.",
+      "githubLink": "https://github.com",
+      "storeLink": null,
+      "technologies": [
+        "Flutter",
+        "GetX",
+        "Firebase",
+        "QR Code",
+        "REST APIs"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Monazamah App",
+      "description": "Designed to manage organizational tasks, incorporating APIs for data synchronization and Firebase for real-time updates and notifications, including alerts for important updates and reminders. Additionally, the app utilizes NFC technology for reading and writing data to enhance task management and streamline processes.",
+      "githubLink": "https://github.com",
+      "storeLink": null,
+      "technologies": [
+        "Flutter",
+        "Firebase",
+        "NFC",
+        "REST APIs"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Acwad_hr App",
+      "description": "HR System: Integrated APIs and Firebase for data handling and authentication. macOS App: Native macOS version with enhanced UI and animations. UI & Animations: Implemented dynamic UI elements and smooth transitions. Features: Employee management, attendance tracking, and real-time updates.",
+      "githubLink": "https://github.com",
+      "storeLink": null,
+      "technologies": [
+        "Flutter",
+        "macOS",
+        "Firebase",
+        "REST APIs"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Medical Excel App",
+      "description": "Transitioned an application from Canon-based systems to a medical-focused solution using Flutter and MedicalExcel. Modified and adapted the code to support comprehensive medical data management, including changes to API integration.",
+      "githubLink": "https://github.com",
+      "storeLink": null,
+      "technologies": [
+        "Flutter",
+        "REST APIs"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "SeeSooq App",
+      "description": "Contributed to the development of the SeeSooq mobile application with a focus on clean code practices and UI enhancements. Utilized the BLoC pattern for state management and developed engaging reels for user interaction.",
+      "githubLink": "https://github.com",
+      "storeLink": "https://play.google.com",
+      "technologies": [
+        "Flutter",
+        "BLoC"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "TahetApp",
+      "description": "built using Cubit for state management and includes a total of 5 screens. This architecture ensures clear and manageable state transitions across the app. The app’s design and functionality are optimized to provide a seamless user experience across various features.",
+      "githubLink": "https://github.com",
+      "storeLink": "https://apps.apple.com",
+      "technologies": [
+        "Flutter",
+        "Cubit"
+      ]
+    }
+  ],
+  "skills": [
+    {
+      "id": 1,
+      "category": "Technical Skills",
+      "items": [
+        "Flutter & Dart",
+        "Object-Oriented Programming (OOP)",
+        "State Management: Provider, Cubit, BLoC, GetX",
+        "RESTful APIs",
+        "Firebase",
+        "Version Control: Git",
+        "Clean Architecture"
+      ]
+    }
+  ]
+}

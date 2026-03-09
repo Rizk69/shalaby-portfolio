@@ -1,4 +1,5 @@
-import { db } from "./db";
+import fs from "fs/promises";
+import path from "path";
 import {
   personalInfo,
   experiences,
@@ -11,7 +12,6 @@ import {
   type Project,
   type Skill,
 } from "@shared/schema";
-import { eq } from "drizzle-orm";
 
 export interface IStorage {
   getPersonalInfo(): Promise<PersonalInfo | null>;
@@ -28,52 +28,163 @@ export interface IStorage {
   createSkill(skill: Omit<Skill, "id">): Promise<Skill>;
 }
 
-export class DatabaseStorage implements IStorage {
-  async getPersonalInfo(): Promise<PersonalInfo | null> {
-    const results = await db.select().from(personalInfo);
-    return results[0] || null;
+// JSON file fallback for local development when DATABASE_URL is not set
+class JsonFileStorage implements IStorage {
+  private filePath: string;
+
+  constructor() {
+    this.filePath = path.resolve(process.cwd(), "server", "dev-data.json");
   }
 
-  async getExperiences(): Promise<Experience[]> {
-    return await db.select().from(experiences);
+  private async readData() {
+    try {
+      const raw = await fs.readFile(this.filePath, "utf8");
+      return JSON.parse(raw);
+    } catch (err) {
+      const initial = { personalInfo: [], experiences: [], education: [], projects: [], skills: [] };
+      await this.writeData(initial);
+      return initial;
+    }
   }
 
-  async getEducation(): Promise<Education[]> {
-    return await db.select().from(education);
+  private async writeData(data: any) {
+    await fs.writeFile(this.filePath, JSON.stringify(data, null, 2), "utf8");
   }
 
-  async getProjects(): Promise<Project[]> {
-    return await db.select().from(projects);
+  private nextId(items: any[]) {
+    return items.length === 0 ? 1 : Math.max(...items.map((i: any) => i.id || 0)) + 1;
   }
 
-  async getSkills(): Promise<Skill[]> {
-    return await db.select().from(skills);
+  async getPersonalInfo() {
+    const data = await this.readData();
+    return data.personalInfo[0] || null;
   }
 
-  async createPersonalInfo(info: Omit<PersonalInfo, "id">): Promise<PersonalInfo> {
-    const [result] = await db.insert(personalInfo).values(info).returning();
-    return result;
+  async getExperiences() {
+    const data = await this.readData();
+    return data.experiences;
   }
 
-  async createExperience(exp: Omit<Experience, "id">): Promise<Experience> {
-    const [result] = await db.insert(experiences).values(exp).returning();
-    return result;
+  async getEducation() {
+    const data = await this.readData();
+    return data.education;
   }
 
-  async createEducation(edu: Omit<Education, "id">): Promise<Education> {
-    const [result] = await db.insert(education).values(edu).returning();
-    return result;
+  async getProjects() {
+    const data = await this.readData();
+    return data.projects;
   }
 
-  async createProject(proj: Omit<Project, "id">): Promise<Project> {
-    const [result] = await db.insert(projects).values(proj).returning();
-    return result;
+  async getSkills() {
+    const data = await this.readData();
+    return data.skills;
   }
 
-  async createSkill(skill: Omit<Skill, "id">): Promise<Skill> {
-    const [result] = await db.insert(skills).values(skill).returning();
-    return result;
+  async createPersonalInfo(info: Omit<PersonalInfo, "id">) {
+    const data = await this.readData();
+    const id = this.nextId(data.personalInfo);
+    const item = { id, ...info } as PersonalInfo;
+    data.personalInfo.push(item);
+    await this.writeData(data);
+    return item;
+  }
+
+  async createExperience(exp: Omit<Experience, "id">) {
+    const data = await this.readData();
+    const id = this.nextId(data.experiences);
+    const item = { id, ...exp } as Experience;
+    data.experiences.push(item);
+    await this.writeData(data);
+    return item;
+  }
+
+  async createEducation(edu: Omit<Education, "id">) {
+    const data = await this.readData();
+    const id = this.nextId(data.education);
+    const item = { id, ...edu } as Education;
+    data.education.push(item);
+    await this.writeData(data);
+    return item;
+  }
+
+  async createProject(proj: Omit<Project, "id">) {
+    const data = await this.readData();
+    const id = this.nextId(data.projects);
+    const item = { id, ...proj } as Project;
+    data.projects.push(item);
+    await this.writeData(data);
+    return item;
+  }
+
+  async createSkill(skill: Omit<Skill, "id">) {
+    const data = await this.readData();
+    const id = this.nextId(data.skills);
+    const item = { id, ...skill } as Skill;
+    data.skills.push(item);
+    await this.writeData(data);
+    return item;
   }
 }
 
-export const storage = new DatabaseStorage();
+// Use real DB storage only when DATABASE_URL is set
+let storageImpl: IStorage;
+if (process.env.DATABASE_URL) {
+  // lazy import to avoid requiring pg when not needed
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const { db } = require("./db");
+  const { eq } = require("drizzle-orm");
+
+  class DatabaseStorage implements IStorage {
+    async getPersonalInfo(): Promise<PersonalInfo | null> {
+      const results = await db.select().from(personalInfo);
+      return results[0] || null;
+    }
+
+    async getExperiences(): Promise<Experience[]> {
+      return await db.select().from(experiences);
+    }
+
+    async getEducation(): Promise<Education[]> {
+      return await db.select().from(education);
+    }
+
+    async getProjects(): Promise<Project[]> {
+      return await db.select().from(projects);
+    }
+
+    async getSkills(): Promise<Skill[]> {
+      return await db.select().from(skills);
+    }
+
+    async createPersonalInfo(info: Omit<PersonalInfo, "id">): Promise<PersonalInfo> {
+      const [result] = await db.insert(personalInfo).values(info).returning();
+      return result;
+    }
+
+    async createExperience(exp: Omit<Experience, "id">): Promise<Experience> {
+      const [result] = await db.insert(experiences).values(exp).returning();
+      return result;
+    }
+
+    async createEducation(edu: Omit<Education, "id">): Promise<Education> {
+      const [result] = await db.insert(education).values(edu).returning();
+      return result;
+    }
+
+    async createProject(proj: Omit<Project, "id">): Promise<Project> {
+      const [result] = await db.insert(projects).values(proj).returning();
+      return result;
+    }
+
+    async createSkill(skill: Omit<Skill, "id">): Promise<Skill> {
+      const [result] = await db.insert(skills).values(skill).returning();
+      return result;
+    }
+  }
+
+  storageImpl = new DatabaseStorage();
+} else {
+  storageImpl = new JsonFileStorage();
+}
+
+export const storage = storageImpl;
