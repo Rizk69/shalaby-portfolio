@@ -1,0 +1,196 @@
+{
+  "personalInfo": [
+    {
+      "id": 1,
+      "name": "Mohamed Rizk Shalaby",
+      "role": "Flutter Developer",
+      "tagline": "I build production-grade mobile apps that ship.",
+      "objective": "Flutter Developer with around 3 years of experience building cross-platform mobile applications for e-commerce and delivery domains. I've shipped multiple production apps to Google Play and the App Store, including multi-role systems (Customer, Driver, Vendor, Admin). Comfortable with GetX, Bloc, Cubit, RESTful APIs, and Clean Architecture — focused on writing maintainable code and delivering polished UI/UX.",
+      "location": "Egypt",
+      "email": "mrizk5500@icloud.com",
+      "phone": "+20 109 843 4717",
+      "linkedin": "https://www.linkedin.com/in/mohamed-rizk-shalaby",
+      "github": "https://github.com/mrizk5500",
+      "resumeUrl": null,
+      "languages": [
+        { "name": "Arabic", "proficiency": "Native" },
+        { "name": "English", "proficiency": "Good" }
+      ]
+    }
+  ],
+  "experiences": [
+    {
+      "id": 1,
+      "company": "Freelance",
+      "location": "Remote — Clients in Iraq & Jordan",
+      "role": "Flutter Developer",
+      "period": "Jan 2024 – Present",
+      "type": "Freelance",
+      "achievements": [
+        "Delivering production-level mobile applications for clients across e-commerce and delivery domains.",
+        "Developed SeeSooq, a full-featured e-commerce platform for buying and selling products.",
+        "Built the Jaeek delivery system (Customer & Driver apps) with multiple branded white-label versions including Itsbase.",
+        "Created a Pets Store app with a smooth, scalable shopping experience.",
+        "Developed a Fashion e-commerce app supporting multi-role functionality (Customer & Store/Vendor).",
+        "Designed and implemented multi-role architectures (Admin, Vendor, Customer, Driver) ensuring scalability and maintainability.",
+        "Integrated real-time features, payment gateways, and RESTful APIs across all apps.",
+        "Focused on performance optimization, clean architecture, and high-quality UI/UX."
+      ]
+    },
+    {
+      "id": 2,
+      "company": "Acwad",
+      "location": "Turkey",
+      "role": "Flutter Developer",
+      "period": "Jan 2023 – Jan 2024",
+      "type": "Full-time",
+      "achievements": [
+        "Developed and maintained multiple mobile apps using Flutter — Bank App, Monazamah, and Acwad HR.",
+        "Built a secure banking application with authentication, transactions, and account management features.",
+        "Developed an organization app to manage users and workflows efficiently.",
+        "Integrated RESTful APIs and handled data management with clean architecture.",
+        "Applied GetX / Bloc state management to keep code scalable and maintainable.",
+        "Designed responsive and user-friendly UI/UX with high performance across devices."
+      ]
+    }
+  ],
+  "education": [
+    {
+      "id": 1,
+      "institution": "Menoufia University",
+      "degree": "Bachelor of Computer Science",
+      "period": "Sep 2019 – Jun 2023",
+      "detail": "Egypt — Cumulative grade: Good"
+    },
+    {
+      "id": 2,
+      "institution": "Information Technology Institute (ITI)",
+      "degree": "Mobile Application Development",
+      "period": "Jul 2023 – Sep 2023",
+      "detail": "Hands-on Flutter & Dart training with focus on clean code, API integration, state management, and responsive UI/UX."
+    }
+  ],
+  "projects": [
+    {
+      "id": 1,
+      "name": "SeeSooq",
+      "tagline": "E-commerce Mobile Application",
+      "category": "E-commerce",
+      "description": "A full-featured e-commerce platform for buying and selling products. Implemented product listings, categories, cart, and order management with optimized performance and responsiveness across devices.",
+      "githubLink": null,
+      "storeLink": "https://apps.apple.com/eg/app/seesooq-%D8%B4%D9%88%D9%81-%D8%A7%D9%84%D8%B3%D9%88%D9%82/id6499473019",
+      "technologies": ["Flutter", "Dart", "REST APIs", "Bloc"],
+      "highlights": ["Product catalog & search", "Cart & order management", "REST API integration"]
+    },
+    {
+      "id": 2,
+      "name": "Jaeek",
+      "tagline": "Multi-Role Delivery System",
+      "category": "Delivery",
+      "description": "A scalable delivery platform with separate Customer and Driver (Captain) applications, plus multiple white-label branded versions including Itsbase. Real-time order tracking, notifications, and full order lifecycle management.",
+      "githubLink": null,
+      "storeLink": "https://apps.apple.com/eg/app/%D8%AC%D8%A7%D9%8A%D9%83-%D9%83%D8%A7%D8%A8%D8%AA%D9%86/id6755484328",
+      "technologies": ["Flutter", "GetX", "Real-time", "REST APIs"],
+      "highlights": ["Customer & Driver apps", "White-label architecture", "Real-time tracking & notifications", "Role-based workflows"]
+    },
+    {
+      "id": 3,
+      "name": "Peets",
+      "tagline": "Pet Products E-commerce",
+      "category": "E-commerce",
+      "description": "An e-commerce application for selling pet products and accessories. Built around clean architecture with a high-performance UI/UX, full product catalog, cart, checkout, and order management.",
+      "githubLink": null,
+      "storeLink": "https://apps.apple.com/jo/app/peets/id6717589262",
+      "technologies": ["Flutter", "Cubit", "Firebase", "Clean Architecture"],
+      "highlights": ["Smooth shopping flow", "Cubit state management", "Firebase backend"]
+    },
+    {
+      "id": 4,
+      "name": "Fashion App",
+      "tagline": "Multi-role E-commerce",
+      "category": "E-commerce",
+      "description": "A fashion e-commerce app supporting multi-role functionality — Customer and Store/Vendor — built with scalability and maintainability in mind from day one.",
+      "githubLink": null,
+      "storeLink": null,
+      "technologies": ["Flutter", "Bloc", "REST APIs"],
+      "highlights": ["Customer & Vendor roles", "Scalable architecture", "Payment integration"]
+    },
+    {
+      "id": 5,
+      "name": "Bank App",
+      "tagline": "Secure Banking Application",
+      "category": "Fintech",
+      "description": "A secure banking application built with Flutter & GetX. Authentication, transactions, account management, QR-based payments, and Firebase-powered notifications for transaction updates.",
+      "githubLink": null,
+      "storeLink": null,
+      "technologies": ["Flutter", "GetX", "Firebase", "QR Payments", "REST APIs"],
+      "highlights": ["Secure authentication", "Transactions & accounts", "QR payment flow", "Realtime notifications"]
+    },
+    {
+      "id": 6,
+      "name": "Monazamah",
+      "tagline": "Organization Management",
+      "category": "Productivity",
+      "description": "An organization-management app for handling tasks, users, and workflows efficiently. APIs sync data while Firebase pushes real-time updates and reminders. NFC support powers fast read/write task workflows.",
+      "githubLink": null,
+      "storeLink": null,
+      "technologies": ["Flutter", "Firebase", "NFC", "REST APIs"],
+      "highlights": ["Workflow management", "NFC read/write", "Realtime notifications"]
+    },
+    {
+      "id": 7,
+      "name": "Acwad HR",
+      "tagline": "HR System (Mobile + macOS)",
+      "category": "Enterprise",
+      "description": "An HR system integrating REST APIs and Firebase for data handling and authentication. Shipped a native macOS variant with enhanced UI and animations. Features employee management, attendance tracking, and real-time updates.",
+      "githubLink": null,
+      "storeLink": null,
+      "technologies": ["Flutter", "macOS", "Firebase", "REST APIs"],
+      "highlights": ["Employee management", "Attendance tracking", "macOS desktop build", "Polished animations"]
+    }
+  ],
+  "skills": [
+    {
+      "id": 1,
+      "category": "Mobile Development",
+      "icon": "smartphone",
+      "items": ["Flutter", "Dart", "Android", "iOS", "Responsive & Adaptive UI", "RTL / LTR Layouts"]
+    },
+    {
+      "id": 2,
+      "category": "State Management",
+      "icon": "layers",
+      "items": ["GetX", "Bloc", "Cubit", "Provider"]
+    },
+    {
+      "id": 3,
+      "category": "Architecture & Patterns",
+      "icon": "blocks",
+      "items": ["Clean Architecture", "MVC", "MVVM", "SOLID Principles"]
+    },
+    {
+      "id": 4,
+      "category": "APIs & Networking",
+      "icon": "plug",
+      "items": ["RESTful APIs", "Dio", "HTTP", "JSON Serialization", "Postman"]
+    },
+    {
+      "id": 5,
+      "category": "Backend (Basic)",
+      "icon": "server",
+      "items": ["Node.js", "Express.js", "API Integration"]
+    },
+    {
+      "id": 6,
+      "category": "Databases & Storage",
+      "icon": "database",
+      "items": ["SQLite", "Shared Preferences", "Local Storage", "Firebase"]
+    },
+    {
+      "id": 7,
+      "category": "Tools & Platforms",
+      "icon": "wrench",
+      "items": ["Git", "GitHub", "Firebase", "Android Studio", "VS Code", "Xcode"]
+    }
+  ]
+}
