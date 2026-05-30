@@ -63,7 +63,7 @@ export function Navbar() {
           href="#home"
           className="text-xl font-bold tracking-tighter text-foreground hover:text-primary transition-colors inline-flex items-center gap-1"
         >
-          <span className="text-gradient">MRS</span>
+          <span className="text-gradient">Mohamed</span>
           <span className="text-primary">.</span>
         </a>
 
