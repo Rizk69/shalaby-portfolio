@@ -39,7 +39,7 @@ export function Projects({ data }: ProjectsProps) {
   if (!data?.length) return null;
 
   return (
-    <section id="projects" className="py-24 bg-secondary/20 relative">
+    <section id="projects" className="py-16 md:py-24 bg-secondary/20 relative">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         <SectionHeading
           title="Featured Projects"

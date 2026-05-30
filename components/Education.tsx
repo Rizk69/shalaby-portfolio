@@ -13,7 +13,7 @@ export function Education({ data }: EducationProps) {
   if (!data?.length) return null;
 
   return (
-    <section id="education" className="py-24 bg-secondary/20">
+    <section id="education" className="py-16 md:py-24 bg-secondary/20">
       <div className="max-w-5xl mx-auto px-6 md:px-12">
         <SectionHeading title="Education & Training" subtitle="My academic and professional foundation." />
 

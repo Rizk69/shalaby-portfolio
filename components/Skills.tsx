@@ -32,7 +32,7 @@ export function Skills({ data }: SkillsProps) {
   if (!data?.length) return null;
 
   return (
-    <section id="skills" className="py-24 relative">
+    <section id="skills" className="py-16 md:py-24 relative">
       <div className="absolute inset-0 bg-grid-fade opacity-40 pointer-events-none" />
       <div className="max-w-7xl mx-auto px-6 md:px-12 relative">
         <SectionHeading

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   motion,
   AnimatePresence,
@@ -9,7 +9,8 @@ import {
   useTransform,
   useSpring,
 } from "framer-motion";
-import { ArrowUpRight, Star } from "lucide-react";
+import useEmblaCarousel from "embla-carousel-react";
+import { ArrowUpRight, Star, ChevronLeft, ChevronRight } from "lucide-react";
 import type { Project } from "@/types/portfolio";
 
 interface AppShowcaseProps {
@@ -28,7 +29,6 @@ export function AppShowcase({
   projects,
   screenshotsPerApp = 2,
 }: AppShowcaseProps) {
-  // Flatten projects → slides (N screenshots per app)
   const slides = useMemo<ShowcaseSlide[]>(() => {
     const list: ShowcaseSlide[] = [];
     projects.forEach((project) => {
@@ -46,21 +46,227 @@ export function AppShowcase({
     return list;
   }, [projects, screenshotsPerApp]);
 
+  if (slides.length === 0) return null;
+
+  return (
+    <section id="showcase" className="bg-secondary/10">
+      {/* Mobile: swipeable carousel (fluid, finger-friendly) */}
+      <div className="lg:hidden">
+        <MobileShowcase projects={projects} />
+      </div>
+
+      {/* Desktop: sticky scroll showcase */}
+      <div className="hidden lg:block">
+        <DesktopShowcase slides={slides} />
+      </div>
+    </section>
+  );
+}
+
+/* ============================================================ */
+/* MOBILE                                                       */
+/* ============================================================ */
+
+function MobileShowcase({ projects }: { projects: Project[] }) {
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    loop: false,
+    align: "center",
+    containScroll: "trimSnaps",
+  });
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    const onSelect = () => setSelectedIndex(emblaApi.selectedScrollSnap());
+    emblaApi.on("select", onSelect);
+    onSelect();
+    return () => {
+      emblaApi.off("select", onSelect);
+    };
+  }, [emblaApi]);
+
+  return (
+    <div className="relative py-16 overflow-hidden">
+      {/* Eyebrow */}
+      <div className="text-center mb-8 px-6">
+        <div className="inline-flex items-center gap-2 text-[11px] font-mono uppercase tracking-widest text-primary mb-3">
+          <span className="w-6 h-px bg-primary" /> Showcase{" "}
+          <span className="w-6 h-px bg-primary" />
+        </div>
+        <h2 className="text-2xl font-bold leading-tight">
+          Apps shipped to production
+        </h2>
+        <p className="text-sm text-muted-foreground mt-2">
+          Swipe to explore live App Store releases
+        </p>
+      </div>
+
+      {/* Carousel */}
+      <div className="overflow-hidden" ref={emblaRef}>
+        <div className="flex">
+          {projects.map((project) => (
+            <div
+              key={project.id}
+              className="flex-[0_0_88%] min-w-0 px-2 first:pl-6 last:pr-6"
+            >
+              <MobileShowcaseCard project={project} />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Pagination + arrows */}
+      <div className="flex items-center justify-center gap-6 mt-6 px-6">
+        <button
+          type="button"
+          onClick={() => emblaApi?.scrollPrev()}
+          disabled={selectedIndex === 0}
+          className="p-2 rounded-full bg-secondary/60 border border-white/5 text-foreground disabled:opacity-30 disabled:cursor-not-allowed"
+          aria-label="Previous"
+        >
+          <ChevronLeft className="w-4 h-4" />
+        </button>
+
+        <div className="flex items-center gap-1.5">
+          {projects.map((_, i) => (
+            <button
+              key={i}
+              type="button"
+              onClick={() => emblaApi?.scrollTo(i)}
+              className={`h-1.5 rounded-full transition-all ${
+                i === selectedIndex
+                  ? "w-6 bg-primary"
+                  : "w-1.5 bg-white/20"
+              }`}
+              aria-label={`Go to ${i + 1}`}
+            />
+          ))}
+        </div>
+
+        <button
+          type="button"
+          onClick={() => emblaApi?.scrollNext()}
+          disabled={selectedIndex === projects.length - 1}
+          className="p-2 rounded-full bg-secondary/60 border border-white/5 text-foreground disabled:opacity-30 disabled:cursor-not-allowed"
+          aria-label="Next"
+        >
+          <ChevronRight className="w-4 h-4" />
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function MobileShowcaseCard({ project }: { project: Project }) {
+  const firstScreenshot = project.appStore?.screenshots?.[0];
+
+  return (
+    <div className="glass-card rounded-3xl p-5 flex flex-col gap-5 h-full">
+      {/* App identity row */}
+      <div className="flex items-center gap-3">
+        {project.appStore?.icon && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={project.appStore.icon}
+            alt=""
+            className="w-12 h-12 rounded-2xl border border-white/10 shadow"
+          />
+        )}
+        <div className="flex-1 min-w-0">
+          <h3 className="text-lg font-bold text-foreground truncate">
+            {project.name}
+          </h3>
+          <div className="flex items-center gap-2 mt-0.5 flex-wrap">
+            <span className="text-[10px] font-mono uppercase tracking-widest text-primary">
+              {project.category}
+            </span>
+            {project.appStore?.rating ? (
+              <span className="inline-flex items-center gap-0.5 text-[10px] text-amber-300">
+                <Star className="w-2.5 h-2.5 fill-amber-300" />
+                {project.appStore.rating.toFixed(1)}
+              </span>
+            ) : null}
+          </div>
+        </div>
+      </div>
+
+      {/* Phone preview */}
+      {firstScreenshot && (
+        <div className="flex justify-center">
+          <div className="relative w-[180px] aspect-[9/19.5]">
+            <div className="absolute inset-0 -z-10 bg-primary/20 blur-[60px] rounded-full" />
+            <div className="relative w-full h-full rounded-[2rem] border-[8px] border-white/10 bg-black shadow-xl shadow-primary/20 overflow-hidden">
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-20 h-4 bg-black rounded-b-xl z-10 border-x border-b border-white/5" />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={firstScreenshot}
+                alt={`${project.name} screenshot`}
+                className="w-full h-full object-cover"
+                draggable={false}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Description */}
+      {project.tagline && (
+        <p className="text-sm text-foreground/80 font-medium text-center">
+          {project.tagline}
+        </p>
+      )}
+      <p className="text-xs text-muted-foreground leading-relaxed">
+        {project.description}
+      </p>
+
+      {/* Tech */}
+      {project.technologies && (
+        <div className="flex flex-wrap gap-1.5">
+          {project.technologies.slice(0, 4).map((t) => (
+            <span
+              key={t}
+              className="px-2 py-0.5 text-[10px] font-mono bg-white/5 border border-white/10 rounded text-muted-foreground"
+            >
+              {t}
+            </span>
+          ))}
+        </div>
+      )}
+
+      {project.storeLink && (
+        <a
+          href={project.storeLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-auto inline-flex items-center justify-center gap-2 w-full px-4 py-3 rounded-xl bg-primary text-primary-foreground font-medium text-sm shadow-lg shadow-primary/25"
+        >
+          View on App Store
+          <ArrowUpRight className="w-4 h-4" />
+        </a>
+      )}
+    </div>
+  );
+}
+
+/* ============================================================ */
+/* DESKTOP — sticky scroll showcase                             */
+/* ============================================================ */
+
+function DesktopShowcase({ slides }: { slides: ShowcaseSlide[] }) {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end end"],
   });
 
-  // Smooth the progress with a spring so the phone parallax feels fluid
   const smoothProgress = useSpring(scrollYProgress, {
     stiffness: 120,
     damping: 26,
     mass: 0.35,
   });
-
-  // Slight vertical drift for the phone as you scroll within the section
   const phoneY = useTransform(smoothProgress, [0, 1], [-12, 12]);
+  const glow1X = useTransform(scrollYProgress, [0, 1], [-100, 100]);
+  const glow2X = useTransform(scrollYProgress, [0, 1], [100, -100]);
 
   const [activeIndex, setActiveIndex] = useState(0);
   useMotionValueEvent(scrollYProgress, "change", (v) => {
@@ -70,50 +276,37 @@ export function AppShowcase({
     if (idx !== activeIndex) setActiveIndex(idx);
   });
 
-  if (slides.length === 0) return null;
-
   const current = slides[activeIndex];
   const currentProject = current.project;
-  const projectStartIndex = slides.findIndex(
-    (s) => s.project.id === currentProject.id
-  );
 
   return (
     <section
-      id="showcase"
       ref={ref}
-      className="relative bg-secondary/10"
+      className="relative"
       style={{ height: `${slides.length * 100}vh` }}
     >
       <div className="sticky top-0 h-screen overflow-hidden flex items-center">
-        {/* Background dotted grid + glow */}
         <div className="absolute inset-0 bg-grid-fade pointer-events-none" />
         <motion.div
-          style={{
-            x: useTransform(scrollYProgress, [0, 1], [-100, 100]),
-          }}
+          style={{ x: glow1X }}
           className="absolute top-1/3 -left-32 w-[480px] h-[480px] bg-primary/15 rounded-full blur-[140px] opacity-60 pointer-events-none"
         />
         <motion.div
-          style={{
-            x: useTransform(scrollYProgress, [0, 1], [100, -100]),
-          }}
+          style={{ x: glow2X }}
           className="absolute bottom-1/4 -right-32 w-[520px] h-[520px] bg-teal-500/10 rounded-full blur-[160px] opacity-60 pointer-events-none"
         />
 
-        {/* Section eyebrow */}
-        <div className="absolute top-8 md:top-10 left-1/2 -translate-x-1/2 text-center z-10">
-          <div className="inline-flex items-center gap-2 text-[11px] md:text-xs font-mono uppercase tracking-widest text-primary">
-            <span className="w-6 md:w-8 h-px bg-primary" /> Showcase{" "}
-            <span className="w-6 md:w-8 h-px bg-primary" />
+        <div className="absolute top-10 left-1/2 -translate-x-1/2 text-center z-10">
+          <div className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-primary">
+            <span className="w-8 h-px bg-primary" /> Showcase{" "}
+            <span className="w-8 h-px bg-primary" />
           </div>
-          <h2 className="text-xl md:text-3xl font-bold mt-2">
+          <h2 className="text-3xl font-bold mt-2">
             Apps shipped to production
           </h2>
         </div>
 
-        {/* Progress rail (top) */}
-        <div className="absolute top-24 md:top-28 left-1/2 -translate-x-1/2 z-10 flex items-center gap-1.5">
+        <div className="absolute top-28 left-1/2 -translate-x-1/2 z-10 flex items-center gap-1.5">
           {slides.map((_, i) => (
             <div
               key={i}
@@ -128,9 +321,8 @@ export function AppShowcase({
           ))}
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-6 md:px-12 w-full grid lg:grid-cols-12 gap-10 lg:gap-16 items-center">
-          {/* Content side */}
-          <div className="lg:col-span-7 order-2 lg:order-1">
+        <div className="relative max-w-7xl mx-auto px-12 w-full grid grid-cols-12 gap-16 items-center">
+          <div className="col-span-7">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentProject.id}
@@ -139,7 +331,6 @@ export function AppShowcase({
                 exit={{ opacity: 0, y: -16 }}
                 transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
               >
-                {/* App identity row */}
                 <div className="flex items-center gap-4 mb-5">
                   {currentProject.appStore?.icon && (
                     // eslint-disable-next-line @next/next/no-img-element
@@ -162,17 +353,17 @@ export function AppShowcase({
                   </div>
                 </div>
 
-                <h3 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-3 leading-[1.05]">
+                <h3 className="text-5xl xl:text-6xl font-bold mb-3 leading-[1.05]">
                   <span className="text-gradient">{currentProject.name}</span>
                 </h3>
 
                 {currentProject.tagline && (
-                  <p className="text-lg md:text-xl text-foreground/85 mb-5 font-medium">
+                  <p className="text-xl text-foreground/85 mb-5 font-medium">
                     {currentProject.tagline}
                   </p>
                 )}
 
-                <p className="text-sm md:text-base text-muted-foreground leading-relaxed mb-6 max-w-xl">
+                <p className="text-base text-muted-foreground leading-relaxed mb-6 max-w-xl">
                   {currentProject.description}
                 </p>
 
@@ -191,19 +382,18 @@ export function AppShowcase({
                     </ul>
                   )}
 
-                {currentProject.technologies &&
-                  currentProject.technologies.length > 0 && (
-                    <div className="flex flex-wrap gap-2 mb-7">
-                      {currentProject.technologies.map((t) => (
-                        <span
-                          key={t}
-                          className="px-2.5 py-1 text-[11px] font-mono bg-white/5 border border-white/10 rounded-md text-muted-foreground"
-                        >
-                          {t}
-                        </span>
-                      ))}
-                    </div>
-                  )}
+                {currentProject.technologies && (
+                  <div className="flex flex-wrap gap-2 mb-7">
+                    {currentProject.technologies.map((t) => (
+                      <span
+                        key={t}
+                        className="px-2.5 py-1 text-[11px] font-mono bg-white/5 border border-white/10 rounded-md text-muted-foreground"
+                      >
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                )}
 
                 {currentProject.storeLink && (
                   <a
@@ -220,21 +410,16 @@ export function AppShowcase({
             </AnimatePresence>
           </div>
 
-          {/* Phone side */}
-          <div className="lg:col-span-5 order-1 lg:order-2 flex justify-center">
+          <div className="col-span-5 flex justify-center">
             <motion.div
               style={{ y: phoneY }}
-              className="relative w-[240px] md:w-[280px] aspect-[9/19.5]"
+              className="relative w-[280px] aspect-[9/19.5]"
             >
-              {/* Floating glow */}
               <div className="absolute inset-0 -z-10 bg-primary/25 blur-[110px] rounded-full" />
 
-              {/* Phone frame */}
               <div className="relative w-full h-full rounded-[3rem] border-[10px] border-white/10 bg-black shadow-2xl shadow-primary/30 overflow-hidden">
-                {/* Notch */}
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-6 bg-black rounded-b-2xl z-30 border-x border-b border-white/5" />
 
-                {/* Screenshot crossfade */}
                 <div className="absolute inset-0 rounded-[2.25rem] overflow-hidden">
                   <AnimatePresence>
                     <motion.div
@@ -261,7 +446,6 @@ export function AppShowcase({
                   </AnimatePresence>
                 </div>
 
-                {/* Per-app screenshot dots inside the phone */}
                 {current.totalForApp > 1 && (
                   <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5">
                     {Array.from({ length: current.totalForApp }).map((_, i) => (
@@ -278,7 +462,6 @@ export function AppShowcase({
                 )}
               </div>
 
-              {/* Side counter (i / N) */}
               <div className="absolute -right-12 top-1/2 -translate-y-1/2 hidden md:flex flex-col items-center gap-2 text-xs font-mono text-muted-foreground tabular-nums">
                 <span className="text-foreground font-semibold text-base">
                   {String(activeIndex + 1).padStart(2, "0")}
@@ -290,8 +473,7 @@ export function AppShowcase({
           </div>
         </div>
 
-        {/* Hint at bottom */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-[10px] md:text-xs text-muted-foreground/60 tracking-widest uppercase flex items-center gap-2">
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-xs text-muted-foreground/60 tracking-widest uppercase flex items-center gap-2">
           <span>Scroll to explore</span>
           <span className="text-primary">→</span>
         </div>

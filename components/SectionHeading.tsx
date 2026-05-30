@@ -9,13 +9,13 @@ interface SectionHeadingProps {
 
 export function SectionHeading({ title, subtitle }: SectionHeadingProps) {
   return (
-    <div className="mb-12 md:mb-20">
+    <div className="mb-10 md:mb-20">
       <motion.h2 
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.5 }}
-        className="text-3xl md:text-5xl font-bold mb-4"
+        className="text-2xl md:text-5xl font-bold mb-4"
       >
         {title}
       </motion.h2>
@@ -25,7 +25,7 @@ export function SectionHeading({ title, subtitle }: SectionHeadingProps) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="text-muted-foreground text-lg md:text-xl max-w-2xl"
+          className="text-muted-foreground text-base md:text-xl max-w-2xl"
         >
           {subtitle}
         </motion.p>

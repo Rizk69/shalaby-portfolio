@@ -47,3 +47,6 @@ vite.config.ts.*
 # Claude Code local cache
 .local/
 .claude/
+
+.vercel
+.env*

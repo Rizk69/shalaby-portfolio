@@ -57,7 +57,7 @@ export function Hero({ data, showcase = [] }: HeroProps) {
     <section
       ref={ref}
       id="home"
-      className="relative min-h-screen flex items-center pt-28 pb-16 overflow-hidden"
+      className="relative min-h-screen flex items-center pt-24 pb-12 md:pt-28 md:pb-16 overflow-hidden"
     >
       {/* Background grid */}
       <div className="absolute inset-0 bg-grid-fade pointer-events-none" />
@@ -99,7 +99,7 @@ export function Hero({ data, showcase = [] }: HeroProps) {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.05 }}
-            className="text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.05] mb-6"
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.05] mb-5 md:mb-6"
           >
             Hi, I&apos;m {firstName}.
             <br />
@@ -113,7 +113,7 @@ export function Hero({ data, showcase = [] }: HeroProps) {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-lg md:text-xl text-muted-foreground mb-4 leading-relaxed max-w-2xl"
+            className="text-base md:text-xl text-muted-foreground mb-4 leading-relaxed max-w-2xl"
           >
             {data.tagline}
           </motion.p>
@@ -122,7 +122,7 @@ export function Hero({ data, showcase = [] }: HeroProps) {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.15 }}
-            className="text-base md:text-lg text-muted-foreground/80 mb-10 leading-relaxed max-w-2xl"
+            className="text-sm md:text-lg text-muted-foreground/80 mb-8 md:mb-10 leading-relaxed max-w-2xl"
           >
             3 years of shipping cross-platform apps on Google Play & the App Store —
             e-commerce, delivery, fintech, and multi-role systems.
@@ -132,12 +132,12 @@ export function Hero({ data, showcase = [] }: HeroProps) {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="flex flex-wrap items-center gap-3 md:gap-4 mb-10"
+            className="flex flex-wrap items-center gap-3 md:gap-4 mb-8 md:mb-10"
           >
             <Magnetic>
               <a
                 href="#projects"
-                className="px-7 py-3.5 rounded-xl bg-primary text-primary-foreground font-medium inline-flex items-center gap-2 hover:bg-primary/90 transition-colors shadow-lg shadow-primary/25"
+                className="px-5 md:px-7 py-3 md:py-3.5 rounded-xl bg-primary text-primary-foreground font-medium inline-flex items-center gap-2 hover:bg-primary/90 transition-colors shadow-lg shadow-primary/25 text-sm md:text-base"
               >
                 View My Work
                 <ArrowRight className="w-4 h-4" />
@@ -147,7 +147,7 @@ export function Hero({ data, showcase = [] }: HeroProps) {
             <Magnetic>
               <a
                 href={`mailto:${data.email}`}
-                className="px-7 py-3.5 rounded-xl bg-secondary text-foreground font-medium inline-flex items-center gap-2 border border-white/5 hover:border-primary/30 transition-colors"
+                className="px-5 md:px-7 py-3 md:py-3.5 rounded-xl bg-secondary text-foreground font-medium inline-flex items-center gap-2 border border-white/5 hover:border-primary/30 transition-colors text-sm md:text-base"
               >
                 <Mail className="w-4 h-4" />
                 Get in Touch

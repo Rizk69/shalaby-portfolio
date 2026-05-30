@@ -41,7 +41,7 @@ export function About() {
             <div className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-primary mb-4">
               <span className="w-8 h-px bg-primary" /> About
             </div>
-            <h2 className="text-3xl md:text-5xl font-bold leading-tight mb-6">
+            <h2 className="text-2xl md:text-5xl font-bold leading-tight mb-6">
               Mobile apps with a focus on
               <span className="text-gradient"> clean architecture</span> and
               <span className="text-gradient"> great UX</span>.

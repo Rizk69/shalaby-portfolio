@@ -13,7 +13,7 @@ export function Experience({ data }: ExperienceProps) {
   if (!data?.length) return null;
 
   return (
-    <section id="experience" className="py-24 relative">
+    <section id="experience" className="py-16 md:py-24 relative">
       <div className="max-w-5xl mx-auto px-6 md:px-12">
         <SectionHeading
           title="Work Experience"
